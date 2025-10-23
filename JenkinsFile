@@ -63,7 +63,7 @@ pipeline {
                 <p>Build Number: ${env.BUILD_NUMBER}</p>
                 <p>Check the <a href="${env.BUILD_URL}Extent_Reports/">Extent Report</a>.</p>
                 """,
-                to: "your-email@example.com",
+                to: "gurindaguntakiran@gmail.com",
                 mimeType: 'text/html'
             )
         }
