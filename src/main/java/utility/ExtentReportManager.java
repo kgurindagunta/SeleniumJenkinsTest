@@ -19,7 +19,8 @@ public class ExtentReportManager {
 	public  void setupExtentReport() {
 		
 		String reportName = "Extent-Report" +date+".html";
-		sparkReporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/target/extentReports"+reportName);
+		//sparkReporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/target/extentReports"+reportName);
+		sparkReporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/target/extentReports/index.html");
 		sparkReporter.config().setDocumentTitle("OrangeHRM LoginTest");
 		sparkReporter.config().setTheme(Theme.DARK);
 		sparkReporter.config().setReportName("OrangeHRM Extent LoginReport");

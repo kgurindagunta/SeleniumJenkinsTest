@@ -1,0 +1,86 @@
+pipeline {
+    agent any
+
+    environment {
+        CONFIG_SOURCE = "C:/Users/kgurindagunta/Downloads/config.properties"
+        CONFIG_TARGET = "src/main/resources/config.properties"
+    }
+
+    stages {
+        stage('Checkout from GitHub') {
+            steps {
+                echo "🔄 Cloning repository..."
+                git branch: 'master', url: 'https://github.com/kgurindagunta/SeleniumJenkinsTest.git'
+            }
+        }
+
+        stage('Copy config.properties') {
+            steps {
+                echo "📄 Copying config.properties into workspace..."
+                bat """
+                    if not exist "src\\main\\resources" mkdir "src\\main\\resources"
+                    copy "${CONFIG_SOURCE}" "${CONFIG_TARGET}" /Y
+                """
+                bat 'type "src\\main\\resources\\config.properties"'
+            }
+        }
+
+        stage('Build & Run Tests') {
+            steps {
+                echo "🚀 Running Maven build and TestNG tests..."
+                bat "mvn clean test"
+            }
+        }
+
+        stage('Publish Extent Report') {
+            steps {
+                echo "📊 Publishing Extent HTML Report..."
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '/target/extentReports/index.html',
+                    reportFiles: 'index.html',
+                    reportName: 'Extent Reports'
+                ])
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "🧹 Cleaning up workspace..."
+            deleteDir()
+        }
+
+        success {
+            echo "✅ Build Successful! Sending email..."
+            emailext (
+                subject: "✅ Jenkins Build Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                <h2>Build Passed</h2>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the <a href="${env.BUILD_URL}Extent_Reports/">Extent Report</a>.</p>
+                """,
+                to: "your-email@example.com",
+                mimeType: 'text/html'
+            )
+        }
+
+        failure {
+            echo "❌ Build Failed! Sending email..."
+            emailext (
+                subject: "❌ Jenkins Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                <h2>Build Failed</h2>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the <a href="${env.BUILD_URL}console">Jenkins Console Logs</a>.</p>
+                """,
+                to: "gurindaguntakiran@gmail.com",
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
