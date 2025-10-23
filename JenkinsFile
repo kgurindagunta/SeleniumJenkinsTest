@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        CONFIG_SOURCE = "C:/Users/kgurindagunta/Downloads/config.properties"
-        CONFIG_TARGET = "src/main/resources/config.properties"
-    }
-
     stages {
         stage('Checkout from GitHub') {
             steps {
@@ -15,15 +10,15 @@ pipeline {
         }
 
         stage('Copy config.properties') {
-            steps {
-                echo "Copying config.properties into workspace..."
-                bat """
+              steps {
+                  withCredentials([file(credentialsId: 'config-prop', variable: 'CONFIG_FILE')]) {
+                    bat '''
                     if not exist "src\\main\\resources" mkdir "src\\main\\resources"
-                    copy "${CONFIG_SOURCE}" "${CONFIG_TARGET}" /Y
-                """
-                bat 'type "src\\main\\resources\\config.properties"'
-            }
-        }
+                     copy "%CONFIG_FILE%" "src\\main\\resources\\config.properties" /Y
+                    '''
+                        }
+                 }
+         }
 
         stage('Build & Run Tests') {
             steps {
