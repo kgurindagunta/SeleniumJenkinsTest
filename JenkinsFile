@@ -40,6 +40,11 @@ pipeline {
                 ])
             }
         }
+        stage('Archive Extent Report') {
+             steps {
+                  archiveArtifacts artifacts: '/target/extentReports/index.html', fingerprint: true
+             }
+        }
     }
 
     post {
