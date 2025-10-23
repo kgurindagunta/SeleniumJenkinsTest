@@ -34,7 +34,7 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: '/target/extentReports/index.html',
+                    reportDir: 'target/extentReports/index.html',
                     reportFiles: 'index.html',
                     reportName: 'Extent Reports'
                 ])
@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Archive Extent Report') {
              steps {
-                  archiveArtifacts artifacts: '/target/extentReports/index.html', fingerprint: true
+                  archiveArtifacts artifacts: 'target/extentReports/index.html', fingerprint: true
              }
         }
     }
