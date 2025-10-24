@@ -10,15 +10,15 @@ pipeline {
         }
 
         stage('Copy config.properties') {
-              steps {
-                  withCredentials([file(credentialsId: 'config-prop', variable: 'CONFIG_FILE')]) {
+            steps {
+                withCredentials([file(credentialsId: 'config-prop', variable: 'CONFIG_FILE')]) {
                     bat '''
                     if not exist "src\\main\\resources" mkdir "src\\main\\resources"
-                     copy "%CONFIG_FILE%" "src\\main\\resources\\config.properties" /Y
+                    copy "%CONFIG_FILE%" "src\\main\\resources\\config.properties" /Y
                     '''
-                        }
-                 }
-         }
+                }
+            }
+        }
 
         stage('Build & Run Tests') {
             steps {
@@ -40,10 +40,11 @@ pipeline {
                 ])
             }
         }
+
         stage('Archive Extent Report') {
-             steps {
-                  archiveArtifacts artifacts: 'target/extentReports/index.html', fingerprint: true
-             }
+            steps {
+                archiveArtifacts artifacts: 'target/extentReports/index.html', fingerprint: true
+            }
         }
     }
 
@@ -52,15 +53,16 @@ pipeline {
             echo "Cleaning up workspace..."
             deleteDir()
         }
+
         success {
             echo "Build Successful! Sending email..."
             emailext (
                 subject: "Jenkins Build Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                <h2>Build Passed</h2>
-                <p>Project: ${env.JOB_NAME}</p>
-                <p>Build Number: ${env.BUILD_NUMBER}</p>
-                <p>Check the <a href="${env.BUILD_URL}Extent_Reports/">Extent Report</a>.</p>
+                <h2 style='color:green;'>Build Passed</h2>
+                <p><b>Project:</b> ${env.JOB_NAME}</p>
+                <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                <p>Check the <a href="${env.BUILD_URL}Extent_20Reports/">Extent Report</a>.</p>
                 """,
                 to: "gurindaguntakiran@gmail.com",
                 mimeType: 'text/html'
@@ -72,14 +74,14 @@ pipeline {
             emailext (
                 subject: "Jenkins Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                <h2>Build Failed</h2>
-                <p>Project: ${env.JOB_NAME}</p>
-                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <h2 style='color:red;'>Build Failed</h2>
+                <p><b>Project:</b> ${env.JOB_NAME}</p>
+                <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
                 <p>Check the <a href="${env.BUILD_URL}console">Jenkins Console Logs</a>.</p>
                 """,
                 to: "gurindaguntakiran@gmail.com",
                 mimeType: 'text/html'
             )
         }
-}
+    }
 }
