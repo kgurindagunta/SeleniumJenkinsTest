@@ -51,6 +51,35 @@ pipeline {
         always {
             echo "Cleaning up workspace..."
             deleteDir()
-        }   
+        }
+        success {
+            echo "Build Successful! Sending email..."
+            emailext (
+                subject: "Jenkins Build Successful - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                <h2>Build Passed</h2>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the <a href="${env.BUILD_URL}Extent_Reports/">Extent Report</a>.</p>
+                """,
+                to: "gurindaguntakiran@gmail.com",
+                mimeType: 'text/html'
+            )
+        }
+
+        failure {
+            echo "Build Failed! Sending email..."
+            emailext (
+                subject: "Jenkins Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                <h2>Build Failed</h2>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the <a href="${env.BUILD_URL}console">Jenkins Console Logs</a>.</p>
+                """,
+                to: "gurindaguntakiran@gmail.com",
+                mimeType: 'text/html'
+            )
+        }
 }
 }
