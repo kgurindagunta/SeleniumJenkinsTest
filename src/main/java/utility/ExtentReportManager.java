@@ -12,7 +12,7 @@ public class ExtentReportManager {
 	
 	public ExtentSparkReporter sparkReporter;
 	public static ExtentReports extent;
-	//public ExtentTest test;
+	//public ExtentTest test1;
 	
 	String date = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS").format(new Date());
 	
