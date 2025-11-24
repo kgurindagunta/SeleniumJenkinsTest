@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout from GitHub') {
             steps {
                 echo "Cloning repository..."
@@ -12,9 +13,9 @@ pipeline {
         stage('Copy config.properties') {
             steps {
                 withCredentials([file(credentialsId: 'config-prop', variable: 'CONFIG_FILE')]) {
-                    bat '''
-                    if not exist "src\\main\\resources" mkdir "src\\main\\resources"
-                    copy "%CONFIG_FILE%" "src\\main\\resources\\config.properties" /Y
+                    sh '''
+                        mkdir -p src/main/resources
+                        cp "$CONFIG_FILE" src/main/resources/config.properties
                     '''
                 }
             }
@@ -23,7 +24,7 @@ pipeline {
         stage('Build & Run Tests') {
             steps {
                 echo "Running Maven build and TestNG tests..."
-                bat "mvn clean test"
+                sh "mvn clean test"
             }
         }
 
