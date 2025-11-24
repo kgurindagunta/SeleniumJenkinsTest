@@ -51,25 +51,13 @@ public class InitDriver {
 			break;
 
 		case "edge":
-				ChromeOptions options = new ChromeOptions();
-                options.addArguments("--headless=new");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
-                options.addArguments("--remote-allow-origins=*");
-                options.addArguments("--disable-gpu");
-                 options.addArguments("--window-size=1920,1080");
-			driver.set(new EdgeDriver(options));
+				
+			driver.set(new EdgeDriver());
 			break;
 
 		case "firefox":
-				ChromeOptions options = new ChromeOptions();
-                options.addArguments("--headless=new");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
-                options.addArguments("--remote-allow-origins=*");
-                options.addArguments("--disable-gpu");
-                 options.addArguments("--window-size=1920,1080");
-			driver.set(new FirefoxDriver(options));
+				
+			driver.set(new FirefoxDriver());
 			break;
 
 		default:
