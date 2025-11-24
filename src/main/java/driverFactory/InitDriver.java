@@ -38,16 +38,37 @@ public class InitDriver {
 		switch (browser.toLowerCase()) {
 
 		case "chrome":
+			ChromeOptions options = new ChromeOptions();
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--remote-allow-origins=*");
+                options.addArguments("--disable-gpu");
+                 options.addArguments("--window-size=1920,1080");	
 			WebDriverManager.chromedriver().setup();
-			driver.set(new ChromeDriver());
+			driver.set(new ChromeDriver(options));
 			break;
 
 		case "edge":
-			driver.set(new EdgeDriver());
+				ChromeOptions options = new ChromeOptions();
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--remote-allow-origins=*");
+                options.addArguments("--disable-gpu");
+                 options.addArguments("--window-size=1920,1080");
+			driver.set(new EdgeDriver(options));
 			break;
 
 		case "firefox":
-			driver.set(new FirefoxDriver());
+				ChromeOptions options = new ChromeOptions();
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--remote-allow-origins=*");
+                options.addArguments("--disable-gpu");
+                 options.addArguments("--window-size=1920,1080");
+			driver.set(new FirefoxDriver(options));
 			break;
 
 		default:
