@@ -21,6 +21,18 @@ pipeline {
             }
         }
 
+        stage('sonarqube test'){
+           steps{
+                  sh 'mvn sonar:sonar \
+                       -Dsonar.projectKey=netflix \
+                       -Dsonar.host.url=http://18.216.111.77:9000 \
+                       -Dsonar.login=412f52e186c6380dede9a177d70d9251ac8fdc28'
+               }
+        }
+
+
+
+
         stage('Build & Run Tests') {
             steps {
                 echo "Running Maven build and TestNG tests..."
